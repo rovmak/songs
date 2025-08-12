@@ -7,6 +7,8 @@ interface Song {
   img: string;
 }
 
+type FavoriteCategory = string; // Now supports any string as category
+
 import songsData from './songs.json';
 const songs: Song[] = songsData.map(song => ({
   ...song,
@@ -18,7 +20,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showFavorites, setShowFavorites] = useState(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
-  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+  const [favorites, setFavorites] = useState<Record<string, FavoriteCategory>>({});
+  const [activeCategory, setActiveCategory] = useState<FavoriteCategory>('favorites');
 
   useEffect(() => {
     // Load favorites from localStorage
@@ -41,15 +44,23 @@ function App() {
     }
   }, []);
 
-  const toggleFavorite = (id: string) => {
-    const newFavorites = {...favorites, [id]: !favorites[id]};
+  const toggleFavorite = (id: string, category: FavoriteCategory = 'favorites') => {
+    const newFavorites = {...favorites};
+    if (favorites[id]) {
+      delete newFavorites[id];
+    } else {
+      newFavorites[id] = category;
+    }
     setFavorites(newFavorites);
     localStorage.setItem('songFavorites', JSON.stringify(newFavorites));
   };
 
   const filteredSongs = songs.filter((song: Song) => {
     const matchesSearch = song.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFavorite = showFavorites ? favorites[song.id] : true;
+    const matchesFavorite = showFavorites 
+      ? favorites[song.id] && 
+        (activeCategory === 'favorites' || favorites[song.id] === activeCategory)
+      : true;
     return matchesSearch && matchesFavorite;
   });
 
@@ -71,14 +82,30 @@ function App() {
           className="search-input"
         />
         
-        <label className="favorites-switch">
-          <input
-            type="checkbox"
-            checked={showFavorites}
-            onChange={() => setShowFavorites(!showFavorites)}
-          />
-          Show Favorites Only
-        </label>
+        <div className="favorites-controls">
+          <label className="favorites-switch">
+            <input
+              type="checkbox"
+              checked={showFavorites}
+              onChange={() => setShowFavorites(!showFavorites)}
+            />
+            Show Favorites Only
+          </label>
+          {showFavorites && (
+            <select
+              className="category-select"
+              value={activeCategory}
+              onChange={(e) => setActiveCategory(e.target.value as FavoriteCategory)}
+            >
+              <option value="favorites">All Favorites</option>
+              {Array.from(new Set(Object.values(favorites)))
+                .filter(category => category && category.trim() !== '')
+                .map(category => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+            </select>
+          )}
+        </div>
       </div>
 
       <div className="song-list">
@@ -93,8 +120,17 @@ function App() {
               className={`favorite-btn ${favorites[song.id] ? 'favorited' : ''}`}
               onClick={(e) => {
                 e.stopPropagation();
-                toggleFavorite(song.id);
+                if (favorites[song.id]) {
+                  toggleFavorite(song.id);
+                } else {
+                  const category = prompt(
+                    'Choose category:', 
+                    'favorites'
+                  ) as FavoriteCategory;
+                  if (category) toggleFavorite(song.id, category);
+                }
               }}
+              data-category={favorites[song.id] || ''}
             >
               {favorites[song.id] ? '★' : '☆'}
             </button>
