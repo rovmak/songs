@@ -55,7 +55,7 @@ function App() {
 
   const handleSongClick = (song: Song) => {
     const imageUrl = `${import.meta.env.BASE_URL || ''}chord-pages/${song.img}`;
-    window.location.href = imageUrl;
+    window.open(imageUrl, '_self');
   };
 
   return (
@@ -104,6 +104,14 @@ function App() {
 
       {selectedSong && (
         <div className="song-viewer">
+          <div className="viewer-controls">
+            <button 
+              className="back-button"
+              onClick={() => window.history.back()}
+            >
+              ← Back to Songs
+            </button>
+          </div>
           <img 
             src={`${import.meta.env.BASE_URL || ''}chord-pages/${selectedSong.img}`}
             alt={selectedSong.title}
