@@ -27,12 +27,17 @@ function App() {
       setFavorites(JSON.parse(savedFavorites));
     }
 
-    // Check URL for song ID
+    // Check URL for song ID (supports both /song/1 and ?id=1 formats)
+    const pathMatch = window.location.pathname.match(/\/song\/(\d+)/);
     const params = new URLSearchParams(window.location.search);
-    const songId = params.get('id');
+    const songId = pathMatch?.[1] || params.get('id');
     if (songId) {
       const song = songs.find(s => s.id === songId);
-      if (song) setSelectedSong(song);
+      if (song) {
+        setSelectedSong(song);
+        // Ensure image path is correct
+        console.log('Loading image:', `${import.meta.env.BASE_URL || ''}chord-pages/${song.img}`);
+      }
     }
   }, []);
 
