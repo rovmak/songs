@@ -73,13 +73,14 @@ h1 {
   flex-direction: column;
   gap: 8px;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 .song-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
+  padding: 12px 20px;
   background-color: #f9f9f9;
   border-radius: 6px;
   cursor: pointer;
