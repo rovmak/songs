@@ -101,7 +101,7 @@ function App() {
       {selectedSong && (
         <div className="song-viewer">
           <img 
-            src={`/chord-pages/${selectedSong.img}`} 
+            src={`/chord-pages/${selectedSong.img}`}
             alt={selectedSong.title}
             className="song-image"
             onError={(e) => console.error('Image failed to load:', e.currentTarget.src)}
