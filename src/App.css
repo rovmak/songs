@@ -16,6 +16,31 @@ h1 {
   justify-content: space-between;
   margin-bottom: 20px;
   gap: 20px;
+  align-items: center;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-buttons button {
+  padding: 8px 16px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nav-buttons button:hover {
+  background-color: #3a7bc8;
+}
+
+.nav-buttons button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .search-input {

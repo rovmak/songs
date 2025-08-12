@@ -41,6 +41,28 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    // Add keyboard event listeners
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedSong) {
+        if (e.key === 'ArrowLeft') {
+          const currentIndex = songs.findIndex(s => s.id === selectedSong.id);
+          if (currentIndex > 0) {
+            handleSongClick(songs[currentIndex - 1]);
+          }
+        } else if (e.key === 'ArrowRight') {
+          const currentIndex = songs.findIndex(s => s.id === selectedSong.id);
+          if (currentIndex < songs.length - 1) {
+            handleSongClick(songs[currentIndex + 1]);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedSong]);
+
   const toggleFavorite = (id: string) => {
     const newFavorites = {...favorites, [id]: !favorites[id]};
     setFavorites(newFavorites);
@@ -63,6 +85,34 @@ function App() {
       <h1>Chord Book</h1>
       
       <div className="controls">
+        {selectedSong && (
+          <div className="nav-buttons">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                const currentIndex = songs.findIndex(s => s.id === selectedSong.id);
+                if (currentIndex > 0) {
+                  handleSongClick(songs[currentIndex - 1]);
+                }
+              }}
+              disabled={selectedSong && songs[0].id === selectedSong.id}
+            >
+              Previous
+            </button>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                const currentIndex = songs.findIndex(s => s.id === selectedSong.id);
+                if (currentIndex < songs.length - 1) {
+                  handleSongClick(songs[currentIndex + 1]);
+                }
+              }}
+              disabled={selectedSong && songs[songs.length - 1].id === selectedSong.id}
+            >
+              Next
+            </button>
+          </div>
+        )}
         <input
           type="text"
           placeholder="Search songs..."
