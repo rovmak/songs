@@ -126,7 +126,7 @@ h1 {
   z-index: 10;
 }
 
-.back-button {
+.back-button, .home-button {
   padding: 8px 16px;
   background-color: #333;
   color: white;
@@ -135,9 +135,10 @@ h1 {
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.2s;
+  margin-right: 10px;
 }
 
-.back-button:hover {
+.back-button:hover, .home-button:hover {
   background-color: #555;
 }
 

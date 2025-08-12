@@ -147,6 +147,12 @@ function App() {
             >
               ← Back to Songs
             </button>
+            <button 
+              className="home-button"
+              onClick={() => window.location.href = '/'}
+            >
+              Home
+            </button>
           </div>
           <img 
             src={`${import.meta.env.BASE_URL || ''}chord-pages/${selectedSong.img}`}
