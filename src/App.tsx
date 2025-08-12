@@ -50,7 +50,7 @@ function App() {
 
   const handleSongClick = (song: Song) => {
     setSelectedSong(song);
-    window.history.pushState({}, '', `?id=${song.id}`);
+    window.history.pushState({}, '', `/song/${song.id}`);
     console.log('Loading image:', `${import.meta.env.BASE_URL || ''}chord-pages/${song.img}`);
   };
 
