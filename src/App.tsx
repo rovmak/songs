@@ -51,7 +51,7 @@ function App() {
   const handleSongClick = (song: Song) => {
     setSelectedSong(song);
     window.history.pushState({}, '', `?id=${song.id}`);
-    console.log('Loading image:', `/${song.img.replace(/^\/?(songs|chord-pages)\//, '')}`);
+    console.log('Loading image:', `/chord-pages/${song.img}`);
   };
 
   return (
@@ -101,7 +101,7 @@ function App() {
       {selectedSong && (
         <div className="song-viewer">
           <img 
-            src={`/${selectedSong.img.replace(/^\/?(songs|chord-pages)\//, '')}`} 
+            src={`/chord-pages/${selectedSong.img}`} 
             alt={selectedSong.title}
             className="song-image"
             onError={(e) => console.error('Image failed to load:', e.currentTarget.src)}
